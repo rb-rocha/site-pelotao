@@ -66,13 +66,13 @@ const getSummoner = async (nickSearch: INickSearch) => {
 
 const getMasteries = async ({ nickname: nick }: INickSearch) => {
     summoner = await getSummoner({ nickname: nick });
-    let masteries = [];
-    let result = []
+    let masteries:string[] = [];
+    let result: IChampionMastery | string[] = []
     await api.get<IChampionMastery>(`champion-mastery/v4/champion-masteries/by-summoner/${summoner.id}?api_key=${RIOT_API_KEY}`)
         .then(response => {
             result = response.data;
         })
-    result.forEach((mastery) => {
+    result.forEach((mastery:any) => {
         if (mastery.championLevel >= 6 && masteries.length <= 2) {
             masteries.push(mastery)
         }
