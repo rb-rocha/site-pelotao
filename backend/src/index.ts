@@ -1,12 +1,13 @@
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'graphql';
-import router from './routes/helloRoute';
+import router from './routes/route';
 
 var schema = buildSchema(`
     type Query {
         getSummoner(nickname: String) : Summoner
         getMasteries(nickname: String) : [ChampionMastery]
+        getAllChampions :  [IDataChampion]
     }
     type Summoner {
         id : String
@@ -28,6 +29,15 @@ var schema = buildSchema(`
         championLevel: Int,
         championPoints: Float,
         lastPlayTime: Float,
+    }
+
+    type IDataChampion {
+        version: String,
+        id: String,
+        key: String,
+        name: String,
+        title: String,
+        blurb: String
     }
 `);
 var app = express();
