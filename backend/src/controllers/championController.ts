@@ -1,9 +1,12 @@
 import dragonApi from '../services/dragon';
+import fs from 'fs';
 
 interface IChampionDTO {
-    champion: IDataChampion[]
+    type: String,
+    format: String,
+    version: String,
+    data: IDataChampion[]
 }
-
 interface IDataChampion {
     version: String,
     id: String,
@@ -14,27 +17,18 @@ interface IDataChampion {
 }
 
 const getAllChampions = async () => {
-    let result: IDataChampion[] = []
+    let result: IDataChampion[] | String[] = []
     let champions: IDataChampion[] = []
-    let champ: IDataChampion = []
-    await dragonApi.get<IDataChampion[]>('11.22.1/data/pt_BR/champion.json')
+
+    await dragonApi.get<IChampionDTO>('11.22.1/data/pt_BR/champion.json')
         .then(response => {
-            result = response.data;
+            result = (response.data.data)
         })
 
-    result.forEach((champion: IDataChampion) => {
-        champ = {
-            version: champion.version,
-            id: champion.id,
-            key: champion.key,
-            name: champion.key,
-            title: champion.title,
-            blurb: champion.blurb
-        }
-        champions.push(champ)
-    })
-    console.log(champions)
-    return champions;
+    /*     fs.appendFile('result.txt', JSON.stringify(result), error => {
+            if (error) throw error;
+        }) */
+
 }
 
 /* const getChampion = (idChampion : Number)=> {
