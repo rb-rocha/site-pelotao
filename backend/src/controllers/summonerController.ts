@@ -9,8 +9,8 @@ interface ISummoner {
     puuid: string,
     name: string,
     profileIconId: string,
-    revisionDate: Number,
-    summonerLevel: Number
+    revisionDate: number,
+    summonerLevel: number
 }
 
 interface IChampionMastery {
@@ -31,7 +31,7 @@ const {
     RIOT_API_KEY,
 } = process.env;
 
-let summoner: ISummoner | string[] = [];
+let summoner: ISummoner;
 
 const getSummoner = async (nickSearch: INickSearch) => {
 
@@ -55,7 +55,7 @@ const getSummoner = async (nickSearch: INickSearch) => {
 
 const getMasteries = async ({ nickname: nick }: INickSearch) => {
     summoner = await getSummoner({ nickname: nick });
-    let masteries: string[] = [];
+    let masteries: Array<any> = [];
     let result: IChampionMastery | string[] = []
     await api.get<IChampionMastery>(`champion-mastery/v4/champion-masteries/by-summoner/${summoner.id}?api_key=${RIOT_API_KEY}`)
         .then(response => {
