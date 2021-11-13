@@ -8,6 +8,7 @@ var schema = buildSchema(`
         getSummoner(nickname: String) : Summoner
         getMasteries(nickname: String) : [ChampionMastery]
         getAllChampions :  [IDataChampion]
+        getChampion(championKey : Int) : IDataChampion
     }
     type Summoner {
         id : String
@@ -19,26 +20,27 @@ var schema = buildSchema(`
         summonerLevel : Int
     }
 
-    type Hi {
-        teste: Int
-        teste2: Int
-    }
-
     type ChampionMastery {
         championId: Int,
         championLevel: Int,
+        championData : IDataChampion,
         championPoints: Float,
         lastPlayTime: Float,
     }
 
     type IDataChampion {
-        version: String,
         id: String,
         key: String,
         name: String,
         title: String,
-        blurb: String
+        lore: String
+        image: IChampionImage
     }
+
+    type IChampionImage {
+        full: String
+    }
+    
 `);
 var app = express();
 app.use('/graphql', graphqlHTTP({

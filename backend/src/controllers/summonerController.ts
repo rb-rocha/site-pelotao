@@ -1,48 +1,37 @@
 // Get in RIOT API the user information
 import dotenv from 'dotenv';
 import api from '../services/api'
-import dragonApi from '../services/dragon';
+import { getChampion } from './championController';
 
 interface ISummoner {
-    id: String,
-    accountId: String,
-    puuid: String,
-    name: String,
-    profileIconId: String,
+    id: string,
+    accountId: string,
+    puuid: string,
+    name: string,
+    profileIconId: string,
     revisionDate: Number,
     summonerLevel: Number
 }
 
 interface IChampionMastery {
-    championId: Number,
-    championLevel: Number,
+    championId: number,
+    championData: object,
+    championLevel: number,
     championPoints: DoubleRange,
     lastPlayTime: TimeRanges,
 }
 
-interface IMasteriesDTO {
-    champions: IChampionMastery[]
-}
-
 interface INickSearch {
-    nickname: String
+    nickname: string
 }
-
-let summoner: ISummoner = {
-    id: '',
-    accountId: '',
-    puuid: '',
-    name: '',
-    profileIconId: '',
-    revisionDate: 0,
-    summonerLevel: 0
-};
 
 dotenv.config();
 
 const {
     RIOT_API_KEY,
 } = process.env;
+
+let summoner: ISummoner | string[] = [];
 
 const getSummoner = async (nickSearch: INickSearch) => {
 
@@ -74,7 +63,15 @@ const getMasteries = async ({ nickname: nick }: INickSearch) => {
         })
     result.forEach((mastery: any) => {
         if (mastery.championLevel >= 6 && masteries.length <= 2) {
-            masteries.push(mastery)
+            console.log(mastery.championId)
+            let tempMastery: IChampionMastery = {
+                championId: mastery.championId,
+                championData: getChampion({ championKey: mastery.championId }),
+                championLevel: mastery.championLevel,
+                championPoints: mastery.championPoints,
+                lastPlayTime: mastery.lastPlayTime,
+            }
+            masteries.push(tempMastery)
         }
     })
 
