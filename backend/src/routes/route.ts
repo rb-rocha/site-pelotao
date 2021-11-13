@@ -1,11 +1,15 @@
 import dotenv from 'dotenv';
-import { getAllChampions } from '../controllers/championController';
+import { getChampion } from '../controllers/championController';
 import { getMasteries, getSummoner } from '../controllers/summonerController'
 
 dotenv.config();
 
 interface INickSearch {
-    nickname: String
+    nickname: string
+}
+
+interface IChampionKey {
+    championKey: Number
 }
 const router = {
     getSummoner: async ({ nickname: nick }: INickSearch) => {
@@ -14,8 +18,8 @@ const router = {
     getMasteries: async ({ nickname: nick }: INickSearch) => {
         return await getMasteries({ nickname: nick })
     },
-    getAllChampions: async () => {
-        return await getAllChampions()
+    getChampion: async ({ championKey: key }: IChampionKey) => {
+        return await getChampion({ championKey: key })
     }
 }
 
