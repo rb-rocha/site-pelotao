@@ -9,7 +9,7 @@ interface INickSearch {
 }
 
 interface IChampionKey {
-    championKey: Number
+    championKey: number
 }
 const router = {
     getSummoner: async ({ nickname: nick }: INickSearch) => {
