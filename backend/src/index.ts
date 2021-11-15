@@ -7,7 +7,6 @@ var schema = buildSchema(`
     type Query {
         getSummoner(nickname: String) : Summoner
         getMasteries(nickname: String) : [ChampionMastery]
-        getAllChampions :  [IDataChampion]
         getChampion(championKey : Int) : IDataChampion
     }
     type Summoner {

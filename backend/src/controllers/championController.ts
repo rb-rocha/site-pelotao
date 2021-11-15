@@ -1,21 +1,12 @@
 import dragonApi from '../services/dragon';
 import { Champions } from '../models/champions';
+import errorHandler from '../errors';
 
 const getChampion = async ({ championKey: key }: IChampionKey) => {
+
     let champion: IDataChampion | any = []
-    let championName: string | any = Champions[key].toLowerCase()
     let result: IChampionDTO | any = []
-
-    if (championName.indexOf('_') != -1) {
-        let nextLetter = championName.charAt((championName.indexOf('_') + 1))
-        championName = championName.replace(nextLetter, nextLetter.toUpperCase());
-        championName = championName.replace("_", "");
-        console.log(championName)
-    }
-
-    console.log(championName.indexOf('_'))
-
-    championName = championName.charAt(0).toUpperCase() + championName.slice(1)
+    let championName = formatChampionName(Champions[key]);
 
     await dragonApi.get<IChampionDTO>(`11.22.1/data/pt_BR/champion/${championName}.json`)
         .then(response => {
@@ -30,10 +21,40 @@ const getChampion = async ({ championKey: key }: IChampionKey) => {
                 },
                 lore: response.data.data[championName].lore
             }
+            console.log(championName);
+            
+        })
+        .catch(error => {
+            let code: number = error.response.status;            
+            errorHandler('champion', code);
         })
     return champion
 }
 
 export {
     getChampion
+}
+
+const formatChampionName = (key: string) => {
+    if (key != undefined) {
+
+        let championName: string | any = key.toLowerCase()
+    
+        if (championName.indexOf('_') != -1) {
+            let nextLetter = championName.charAt((championName.indexOf('_') + 1))
+            championName = championName.replace(nextLetter, nextLetter.toUpperCase());
+            championName = championName.replace("_", "");
+            console.log(championName)
+        }
+    
+        console.log(championName.indexOf('_'))
+    
+        championName = championName.charAt(0).toUpperCase() + championName.slice(1)
+    
+        return championName;
+    } else {
+        let championName: undefined = undefined;
+        return championName;
+    }
+    
 }

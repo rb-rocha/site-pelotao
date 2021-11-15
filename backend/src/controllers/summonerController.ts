@@ -2,6 +2,7 @@
 import dotenv from 'dotenv';
 import api from '../services/api'
 import { getChampion } from './championController';
+import errorHandler from '../errors';
 
 dotenv.config();
 
@@ -26,23 +27,8 @@ const getSummoner = async (nickSearch: INickSearch) => {
             }
         })
         .catch(error => {
-            let message: string;
-            let statusCode: number = error.response.status;
-
-            switch (statusCode) {
-                case 403:
-                    message = '403: Acesso negado, verifique a API Key.' ;
-                    throw new Error(message);
-
-                case 404:
-                    message = '404: Jogador não encontrado, verifique o nickname.';
-                    throw new Error(message);
-
-                default:
-                    console.log(error);
-                    message = `${statusCode}: Verifique no log o erro retornado.`
-                    break;
-            }
+            let code : number = error.response.status;
+            errorHandler('summoner', code);
         })
     return summoner
 }
@@ -54,6 +40,10 @@ const getMasteries = async ({ nickname: nick }: INickSearch) => {
     await api.get<IChampionMastery>(`champion-mastery/v4/champion-masteries/by-summoner/${summoner.id}?api_key=${RIOT_API_KEY}`)
         .then(response => {
             result = response.data;
+        })
+        .catch(error => {
+            let code: number = error.response.status;            
+            errorHandler('summoner', code);
         })
     result.forEach((mastery: any) => {
         if (mastery.championLevel >= 6 && masteries.length <= 2) {
