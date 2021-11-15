@@ -37,7 +37,7 @@ const getSummoner = async (nickSearch: INickSearch) => {
 
     await api.get<ISummoner>(`summoner/v4/summoners/by-name/${nickSearch.nickname}?api_key=${RIOT_API_KEY}`)
         .then(response => {
-            summoner = {
+            return summoner = {
                 id: response.data.id,
                 accountId: response.data.accountId,
                 puuid: response.data.puuid,
@@ -48,7 +48,23 @@ const getSummoner = async (nickSearch: INickSearch) => {
             }
         })
         .catch(error => {
-            console.log(error.message)
+            let message: string;
+            let statusCode: number = error.response.status;
+
+            switch (statusCode) {
+                case 403:
+                    message = '403: Acesso negado, verifique a API Key.' ;
+                    throw new Error(message);
+
+                case 404:
+                    message = '404: Jogador não encontrado, verifique o nickname.';
+                    throw new Error(message);
+
+                default:
+                    console.log(error);
+                    message = `${statusCode}: Verifique no log o erro retornado.`
+                    break;
+            }
         })
     return summoner
 }
@@ -71,7 +87,7 @@ const getMasteries = async ({ nickname: nick }: INickSearch) => {
                 championPoints: mastery.championPoints,
                 lastPlayTime: mastery.lastPlayTime,
             }
-            masteries.push(tempMastery)
+            masteries.push(tempMastery);
         }
     })
 
