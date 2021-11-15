@@ -1,0 +1,41 @@
+const { buildSchema } = require('graphql');
+
+const userSchema = buildSchema(`
+type Query {
+        getSummoner(nickname: String) : Summoner
+        getMasteries(nickname: String) : [ChampionMastery]
+        getChampion(championKey : Int) : IDataChampion
+    }
+    type Summoner {
+        id : String
+        accountId : String
+        puuid : String
+        name : String
+        profileIconId : String
+        revisionDate : Float
+        summonerLevel : Int
+    }
+
+    type ChampionMastery {
+        championId: Int,
+        championLevel: Int,
+        championData : IDataChampion,
+        championPoints: Float,
+        lastPlayTime: Float,
+    }
+
+    type IDataChampion {
+        id: String,
+        key: String,
+        name: String,
+        title: String,
+        lore: String
+        image: IChampionImage
+    }
+
+    type IChampionImage {
+        full: String
+    }
+`);
+
+module.exports = userSchema;
