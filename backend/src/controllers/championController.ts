@@ -26,7 +26,7 @@ const getChampion = async ({ championKey: key }: IChampionKey) => {
         })
         .catch(error => {
             let code: number = error.response.status;            
-            errorHandler('champion', code);
+            errorHandler('champion', code, error);
         })
     return champion
 }

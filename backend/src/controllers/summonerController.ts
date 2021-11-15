@@ -28,7 +28,7 @@ const getSummoner = async (nickSearch: INickSearch) => {
         })
         .catch(error => {
             let code : number = error.response.status;
-            errorHandler('summoner', code);
+            errorHandler('summoner', code, error);
         })
     return summoner
 }
@@ -43,7 +43,7 @@ const getMasteries = async ({ nickname: nick }: INickSearch) => {
         })
         .catch(error => {
             let code: number = error.response.status;            
-            errorHandler('summoner', code);
+            errorHandler('summoner', code, error);
         })
     result.forEach((mastery: any) => {
         if (mastery.championLevel >= 6 && masteries.length <= 2) {

@@ -1,4 +1,4 @@
-const errorHandler = (type: string, code: number) => {
+const errorHandler = (type: string, code: number, error: Error) => {
 	let message: string;
 	let statusCode: number = code;
 
@@ -9,7 +9,6 @@ const errorHandler = (type: string, code: number) => {
 					? 'Campeão não econtrado, verifique a championKey'
 					: 'Acesso negado, verifique a API Key.'
 			}`;
-
 			throw new Error(message);
 
 		case 404:
@@ -20,6 +19,7 @@ const errorHandler = (type: string, code: number) => {
 
 		default:
 			message = `${statusCode}: Verifique no log o erro retornado.`;
+            console.log(error); 
 			break;
 	}
 };
