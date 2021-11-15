@@ -1,29 +1,5 @@
 import dragonApi from '../services/dragon';
-import fs from 'fs';
 import { Champions } from '../models/champions';
-
-interface IChampionDTO {
-    type: string,
-    format: string,
-    version: string,
-    data: IDataChampion[]
-}
-interface IDataChampion {
-    id: string,
-    key: string,
-    name: string,
-    title: string,
-    lore: string,
-    image: IChampionImage
-}
-
-interface IChampionKey {
-    championKey: number
-}
-
-interface IChampionImage {
-    full: String
-}
 
 const getChampion = async ({ championKey: key }: IChampionKey) => {
     let champion: IDataChampion | any = []
@@ -56,18 +32,7 @@ const getChampion = async ({ championKey: key }: IChampionKey) => {
             }
         })
     return champion
-
-    /*     fs.appendFile('result.txt', JSON.stringify(result), error => {
-            if (error) throw error;
-        }) */
-
 }
-
-/* const getChampion = (idChampion : Number)=> {
-
-    dragonApi.get<IChampionDTO[]>()
-
-} */
 
 export {
     getChampion

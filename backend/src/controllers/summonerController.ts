@@ -3,28 +3,6 @@ import dotenv from 'dotenv';
 import api from '../services/api'
 import { getChampion } from './championController';
 
-interface ISummoner {
-    id: string,
-    accountId: string,
-    puuid: string,
-    name: string,
-    profileIconId: string,
-    revisionDate: number,
-    summonerLevel: number
-}
-
-interface IChampionMastery {
-    championId: number,
-    championData: object,
-    championLevel: number,
-    championPoints: DoubleRange,
-    lastPlayTime: TimeRanges,
-}
-
-interface INickSearch {
-    nickname: string
-}
-
 dotenv.config();
 
 const {
@@ -79,7 +57,6 @@ const getMasteries = async ({ nickname: nick }: INickSearch) => {
         })
     result.forEach((mastery: any) => {
         if (mastery.championLevel >= 6 && masteries.length <= 2) {
-            console.log(mastery.championId)
             let tempMastery: IChampionMastery = {
                 championId: mastery.championId,
                 championData: getChampion({ championKey: mastery.championId }),
